@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="position-sticky sticky-top w-100 bg-light">
+    <div class="container py-4">
+      <a href="{{ url_for('index') }}" class="btn btn-sm btn-outline-secondary btn-light mb-3">❮ Back to Search</a>
+      <div class="d-flex justify-content-between align-items-center">
+        <div>
+          <h1 class="mb-0">{{ course[1] }}</h1>
+          <small class="text-muted">{{ course[3] }} | {{ course[2] }}</small>
+        </div>
+        <div class="d-flex">
+          <div class="mx-5 text-center">
+            Average Rating<br>
+            <span class="display-6">
+              {{ stats['average_rating']|round(1) }}/5
+            </span>
+          </div>
+          <div>
+            {% for i in range(1, 6) %}
+              <div class="d-inline-block mx-2 text-center">
+                <strong class="small">{{ 6-i }} ⭐️</strong>
+                <br>
+                {{ (((stats['ratings'][5-i] or 0) / stats['ratings']|sum)*100)|round|int }}%
+                <br>
+                <span class="text-muted small">
+                  {{ stats['ratings'][5-i] or 0 }}
+                </span>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="container py-4">
+    <ul class="list-group">
+      {% for rating in stats['comment_ratings'] %}
+        <li class="list-group-item">
+          <div class="d-flex justify-content-between small text-muted mb-1">
+            <div class="text-nowrap">
+              {{ rating[6] }}
+              {% for n in range(1, rating[2]) %}⭐️{% endfor %}
+            </div>
+            <div class="text-nowrap">
+              👍 {{ rating[4] }}
+              👎 {{ rating[5] }}
+            </div>
+          </div>
+          <div>
+            {{ rating[1] }}
+          </div>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+{% endblock %}

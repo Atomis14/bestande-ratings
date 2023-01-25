@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="position-sticky sticky-top w-100 bg-light py-3" >
+    <div class="container">
+      <h1>Search for courses</h1>
+      <form action="" class="input-group" method="GET">
+        <input type="text" name="course" id="course" placeholder="e.g. Asset Pricing" value="{{ request.args.get('course') or '' }}" class="form-control form-control-lg" autofocus>
+        <input type="submit" value="Search" class="btn btn-primary btn-lg">
+      </form>
+      {% if request.args.get('course') %}
+        <small class="text-muted mt-2 d-block text-right">{{ courses|length }} Results for '{{ request.args.get('course') }}'</small>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="container pb-4" >
+    {% if request.args.get('course') == '' %}
+      Please enter a search term.
+    {% endif %}
+    {% if courses %}
+      <div class="list-group">
+        {% for course in courses %}
+          <a href="{{ url_for('course', id=course[4]) }}" class="list-group-item list-group-item-action">
+            <div class="d-flex w-100 justify-content-between">
+              <h5 class="mb-1">{{ course[1] }}</h5>
+              <small>{{ course[3] }}</small>
+            </div>
+            <p class="mb-0">{{ course[2] }}</p>
+            <!-- <small class="text-muted">{{ course[1] }}</small> -->
+          </a>
+        {% endfor %}
+      </div>
+    {% endif %}
+  </div>
+{% endblock %}
